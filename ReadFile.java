@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
+
 /** Class containing a file reading demo */
 public class ReadFile {
   /** The main method reads from a file and prints the contents. */
