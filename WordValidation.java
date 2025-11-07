@@ -58,6 +58,11 @@ public class WordValidation implements SpellingOperations {
         return res;
     }
 
+    /**
+     * Convert a String to a LinkedList of its letters
+     * @param str the String
+     * @return the LinkedList representation of str
+     */
     public LinkedList<String> stringToLinkedList(String str) {
         LinkedList<String> res = new LinkedList<String>();
         for (int i = 0; i < str.length(); i++) {
@@ -137,9 +142,60 @@ public class WordValidation implements SpellingOperations {
         return this.hashSetToString(finalSuggestions);
     }
 
+        /**
+     * Generate legal (within dictionary) words by deleting one letter of the word
+     * @param word
+     * @return all legal words as a String
+     */
+    public String tryInsert(String word) {
+        // 0. Have the alphabet 
+        String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        // 1. Have a suggestions hashSet
+        HashSet<String> finalSuggestions = new HashSet<String>();
+        // 2. Perform deletion procedure on each word
+        // 2.0. Setup word as a LinkedList
+        LinkedList<String> wordLL = this.stringToLinkedList(word);
+        // 2.1. Generate insertion at each spot
+
+        // LETS GET DOWN TO BUSINESS
+        // 1. Traverse the word to find a spot
+        ListIterator<String> bigIt = wordLL.listIterator();
+        while (bigIt.hasNext() || bigIt.hasPrevious()) {
+            // 1. Make word clone to operate on
+            LinkedList<String> clone = this.stringToLinkedList(word);
+            // 2. Find insertion spot (whichever letter the bigIt is at)
+            ListIterator<String> deleteIt = clone.listIterator();
+            while(deleteIt.nextIndex() != bigIt.nextIndex()) {
+                deleteIt.next();
+            }
+            // 3. Insert each letter of the alphabet into spot
+            for (String letter: alphabet) {
+                // 1. Actually insert
+                deleteIt.add(letter);
+                // 2. Convert result into String format
+                String res = this.llToString(clone);
+                // 3. Check result eligibility -> add to 'suggestions' if yes
+                if (this.containsWord(res)) {
+                    finalSuggestions.add(res);
+                }
+                // 4. Delete inserted letter for reusing
+                deleteIt.previous(); // this returns the letter just inserted
+                deleteIt.remove();
+            }
+            
+            // Advance bigIt() (if able to - not executed at final spot) 
+            if (bigIt.hasNext()) {
+                bigIt.next();
+            }
+        }
+
+        // 3. Return 'suggestions'
+        return this.hashSetToString(finalSuggestions);
+    }
+
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.tryDelete("button "));
+        System.out.println(first.tryInsert("buton"));
 
     }
 }
