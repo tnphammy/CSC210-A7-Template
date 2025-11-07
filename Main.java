@@ -16,6 +16,11 @@ public class Main {
         System.out.println(first.tryInsert("ca")); // Output: "can cap cab car cad cat caw cam"
         System.out.println(first.tryInsert("at")); // Output: "mat pat art oat rat apt tat ant sat vat aft act ate bat cat fat eat hat"
 
+        // Test: Substitution
+        System.out.println("----------------------SUBSTITUTION TESTS----------------------");
+        System.out.println(first.trySubstitute("caxtle")); // Output: "castle cattle"
+        System.out.println(first.trySubstitute("cattle")); // Output: "battle castle tattle rattle wattle"
+        System.out.println(first.trySubstitute("cat ")); // Output: catt cats cato
     
     }
 }

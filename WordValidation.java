@@ -28,7 +28,7 @@ public class WordValidation implements SpellingOperations {
         }
         while (reader.hasNextLine()) {
             String wordEntry = reader.nextLine();
-            validWords.add(wordEntry); // add word into our dictionary
+            validWords.add(wordEntry.toLowerCase()); // add word into our dictionary
         }
         reader.close();
         // update attributes
@@ -113,6 +113,7 @@ public class WordValidation implements SpellingOperations {
      * @return all legal words as a String
      */
     public String tryDelete(String word) {
+        word.toLowerCase();
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
         // 2. Perform deletion procedure on each word
@@ -149,12 +150,13 @@ public class WordValidation implements SpellingOperations {
     }
 
     /**
-     * Generate legal (within dictionary) words by deleting one letter of the word
+     * Generate legal (within dictionary) words by inserting one letter
      * 
      * @param word
      * @return all legal words as a String
      */
     public String tryInsert(String word) {
+        word.toLowerCase();
         // 0. Have the alphabet
         String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         // 1. Have a suggestions hashSet
@@ -171,14 +173,14 @@ public class WordValidation implements SpellingOperations {
             // 1. Make word clone to operate on
             LinkedList<String> clone = this.stringToLinkedList(word);
             // 2. Find insertion spot (whichever letter the bigIt is at)
-            ListIterator<String> deleteIt = clone.listIterator();
-            while (deleteIt.nextIndex() != bigIt.nextIndex()) {
-                deleteIt.next();
+            ListIterator<String> insertIt = clone.listIterator();
+            while (insertIt.nextIndex() != bigIt.nextIndex()) {
+                insertIt.next();
             }
             // 3. Insert each letter of the alphabet into spot
             for (String letter : alphabet) {
                 // 1. Actually insert
-                deleteIt.add(letter);
+                insertIt.add(letter);
                 // 2. Convert result into String format
                 String res = this.llToString(clone);
                 // 3. Check result eligibility -> add to 'suggestions' if yes
@@ -186,15 +188,13 @@ public class WordValidation implements SpellingOperations {
                     finalSuggestions.add(res);
                 }
                 // 4. Delete inserted letter for reusing
-                deleteIt.previous(); // this returns the letter just inserted
-                deleteIt.remove();
-                System.out.println("res: " + res);
-                System.out.println("clone afer removal: " + clone);
+                insertIt.previous(); // this returns the letter just inserted
+                insertIt.remove();
             }
 
             // Advance bigIt() (if able to - not executed at final spot)
             bigIt.next();
-            
+
         }
         // Tries once for final spot
         LinkedList<String> clone = this.stringToLinkedList(word);
@@ -214,8 +214,60 @@ public class WordValidation implements SpellingOperations {
             // 4. Delete inserted letter for reusing
             finalIt.previous(); // this returns the letter just inserted
             finalIt.remove();
-            System.out.println("res: " + res);
-            System.out.println("clone afer removal: " + clone);
+        }
+
+        // 3. Return 'suggestions'
+        return this.hashSetToString(finalSuggestions);
+    }
+
+    /**
+     * Generate legal (within dictionary) words by substituting one letter of the
+     * word
+     * 
+     * @param word
+     * @return all legal words as a String
+     */
+    public String trySubstitute(String word) {
+        word.toLowerCase();
+        // 0. Have the alphabet
+        String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        // 1. Have a suggestions hashSet
+        HashSet<String> finalSuggestions = new HashSet<String>();
+        // 2. Perform deletion procedure on each word
+        // 2.0. Setup word as a LinkedList
+        LinkedList<String> wordLL = this.stringToLinkedList(word);
+        // 2.1. Generate insertion at each spot
+
+        // LETS GET DOWN TO BUSINESS
+        // 1. Traverse the word to find a spot
+        ListIterator<String> bigIt = wordLL.listIterator();
+        while (bigIt.hasNext()) {
+            // 1. Make word clone to operate on
+            LinkedList<String> clone = this.stringToLinkedList(word);
+            // 2. Find insertion spot (whichever letter the bigIt is at)
+            ListIterator<String> changeIt = clone.listIterator();
+            while (changeIt.nextIndex() != bigIt.nextIndex()) {
+                changeIt.next();
+            }
+            // 3. Replace each letter of the alphabet into spot
+            String stored = changeIt.next(); // get the letter for replacement
+            for (String letter : alphabet) {
+                if (letter.equals(stored)) {
+                    continue;
+                }
+                // 1. Actually insert
+                changeIt.set(letter);
+                // 2. Convert result into String format
+                String res = this.llToString(clone);
+                // 3. Check result eligibility -> add to 'suggestions' if yes
+                if (this.containsWord(res)) {
+                    finalSuggestions.add(res);
+                }
+            }
+
+            // Advance bigIt() (if able to - not executed at final spot)
+            bigIt.next();
+
         }
 
         // 3. Return 'suggestions'
@@ -224,7 +276,7 @@ public class WordValidation implements SpellingOperations {
 
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.tryInsert("at"));
+        System.out.println(first.trySubstitute("cat "));
 
     }
 }
