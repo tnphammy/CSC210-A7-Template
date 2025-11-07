@@ -15,23 +15,23 @@ YES 1 pt: Loads and stores dictionary
 
 YES 1 pt: Implements containsWord method as specified
 
-_____ 5 pts: Implements nearMisses method as specified, composed of:
+PART 5 pts: Implements nearMisses method as specified, composed of:
 
-      _____ 1 pt: Suggests correct deletions
+      YES 1 pt: Suggests correct deletions
 
-      _____ 1 pt: Suggests correct insertions
+      YES 1 pt: Suggests correct insertions
 
-      _____ 1 pt: Suggests correct substitutions
+      YES 1 pt: Suggests correct substitutions
 
-      _____ 1 pt: Suggests correct transpositions
+      NO 1 pt: Suggests correct transpositions
 
-      _____ 1 pt: Suggests correct split words
+      NO 1 pt: Suggests correct split words
 
-_____ 1 pt: Main includes multiple tests for each point listed above
+YES 1 pt: Main includes multiple tests for each point listed above
 
-_____ 1 pt: SpellChecker runs in command line mode as described
+NO 1 pt: SpellChecker runs in command line mode as described
 
-_____ 1 pt: SpellChecker runs in file checking mode as described
+NO 1 pt: SpellChecker runs in file checking mode as described
 
 (Note that in addition to the tests that you write, we will perform automated testing of our own on your submitted code.)
 
@@ -39,22 +39,22 @@ _____ 1 pt: SpellChecker runs in file checking mode as described
 
 ## General Items:
 
-_____ 4 pts: Programs compile without errors or warnings
+YES 4 pts: Programs compile without errors or warnings
 
-_____ 2 pts: Executes fully & consistently without crashing (exception/freeze)
+YES 2 pts: Executes fully & consistently without crashing (exception/freeze)
 
-_____ 2 pt: Complies with style guidelines (missing items 1 pt each):
+YES 2 pt: Complies with style guidelines (missing items 1 pt each):
 
-      _____ Classes & class members all have Javadoc header comments
+      YES Classes & class members all have Javadoc header comments
 
-      _____ Clear and consistent indentation of bracketed sections
+      YES Clear and consistent indentation of bracketed sections
 
-      _____ Adheres to Java conventions on naming & capitalization
+      YES Adheres to Java conventions on naming & capitalization
 
-      _____ Methods & variables all have clear and accurate names
+      YES Methods & variables all have clear and accurate names
 
-      _____ Methods avoid confusing side effects
+      YES Methods avoid confusing side effects
 
-_____ 1 pt: All required files included with submission (including completed checklist file)
+YES 1 pt: All required files included with submission (including completed checklist file)
 
-_____ 1 pt: readme.md contains your reflection on the assignment
+YES 1 pt: readme.md contains your reflection on the assignment
