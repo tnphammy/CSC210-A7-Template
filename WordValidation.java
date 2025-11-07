@@ -69,6 +69,25 @@ public class WordValidation implements SpellingOperations {
     }
 
     /**
+     * Convert a HashSet with String elements into a String
+     * @param set the HashSet
+     * @return the desired String representation
+     */
+    public String hashSetToString(HashSet<String> set) {
+        String res = "";
+        for (String each : set) {
+            if (res == "") {
+                res += each; // no space for first element
+            }
+            else {
+                res += " ";
+                res += each;
+            }
+        }
+        return res;
+    }
+
+    /**
      * Checks for words that are one edit away from the queried word
      * @param query the word to check
      * @return a list of all valid words that are one edit away from the quer
@@ -83,9 +102,7 @@ public class WordValidation implements SpellingOperations {
      * @return all legal words as a String
      */
     public String tryDelete(String word) {
-        // 1. Have a suggestions String
-        String suggestions = "";
-        // should have a suggestions hashSet
+        // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
         // 2. Perform deletion procedure on each word
         // 2.0. Setup word as a LinkedList
@@ -117,12 +134,12 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return finalSuggestions.toString();
+        return this.hashSetToString(finalSuggestions);
     }
 
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.tryDelete("catttle"));
+        System.out.println(first.tryDelete("button "));
 
     }
 }
