@@ -1,4 +1,6 @@
+/** Class that contains all tests on nearMisses methods */
 public class Main {
+    /** Main method for debugging */
     public static void main(String[] args) {
         // 0. Setup Word Validation
         WordValidation first = new WordValidation("words.txt");
@@ -25,6 +27,11 @@ public class Main {
         // Test: Transposition
         System.out.println("----------------------TRANSPOSITION TESTS----------------------");
         System.out.println(first.tryTranspose("cat")); // Output: "act"
+        
+        // Test: Splitting
+        System.out.println("----------------------SPLITTING TESTS----------------------");
+        System.out.println(first.tryTranspose("cattell")); // Output: "catt ell cat tell"
+        System.out.println(first.tryTranspose("")); // Output: ""
         
     }
 }

@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.ListIterator;
-
+/** Class containing word checker - no user interaction */
 public class WordValidation implements SpellingOperations {
+    /** HashSet representation of 'dictionary' elements */
     public HashSet<String> validWords = null;
 
     /**
@@ -109,7 +110,7 @@ public class WordValidation implements SpellingOperations {
     /**
      * Generate legal (within dictionary) words by deleting one letter of the word
      * 
-     * @param word
+     * @param word the queried word
      * @return all legal words as a String
      */
     public String tryDelete(String word) {
@@ -152,7 +153,7 @@ public class WordValidation implements SpellingOperations {
     /**
      * Generate legal (within dictionary) words by inserting one letter
      * 
-     * @param word
+     * @param word the queried word
      * @return all legal words as a String
      */
     public String tryInsert(String word) {
@@ -223,7 +224,7 @@ public class WordValidation implements SpellingOperations {
     /**
      * Generate legal (within dictionary) words by substituting one letter of the word
      * 
-     * @param word
+     * @param word the queried word
      * @return all legal words as a String
      */
     public String trySubstitute(String word) {
@@ -276,7 +277,7 @@ public class WordValidation implements SpellingOperations {
     /**
      * Generate legal (within dictionary) words by swapping adjacent characters
      * 
-     * @param word
+     * @param word the queried word
      * @return all legal words as a String
      */
     public String tryTranspose(String word) {
@@ -325,9 +326,76 @@ public class WordValidation implements SpellingOperations {
         return this.hashSetToString(finalSuggestions);
     }
 
+    /**
+     * Generate legal (within dictionary) words by splitting the word into two parts
+     * 
+     * @param word the queried word
+     * @return all legal word pairs as a String
+     */
+    public String trySplit(String word) {
+        word.toLowerCase();
+        // 1. Have a suggestions hashSet
+        HashSet<String> finalSuggestions = new HashSet<String>();
+        // 2. Perform transposition procedure on each word
+        // 2.0. Setup word as a LinkedList
+        LinkedList<String> wordLL = this.stringToLinkedList(word);
+        // 2.1. Generate two "words" spaced at each spot
+
+        // LETS GET DOWN TO BUSINESS
+        // 1. Traverse the word to find a spot
+        ListIterator<String> bigIt = wordLL.listIterator();
+        while (bigIt.hasNext()) {
+            // 1. Make word clone to operate on
+            LinkedList<String> clone = this.stringToLinkedList(word);
+            // 2. Find space spot (whichever letter the bigIt is at)
+            // 2.0. Prohibit putting a space at the front 
+            if (!bigIt.hasPrevious()) {
+                bigIt.next(); // go to the next available spot
+                continue;
+            }
+            ListIterator<String> spaceIt = clone.listIterator();
+            while (spaceIt.nextIndex() != bigIt.nextIndex()) {
+                spaceIt.next();
+            }
+            // 3. Populate two LinkedList's of the two parts
+            // Make a suffix LL (the prefix = 'clone' modified)
+            LinkedList<String> suffixLL = new LinkedList<>();
+            // Remove all elements after Iterator from 'clone' -> put into 'suffix'
+            while(spaceIt.hasNext()) {
+                String stored = spaceIt.next();
+                spaceIt.remove();
+                suffixLL.addLast(stored);
+            }
+            // Prohibit putting a space at the front (by checking if suffixLL is empty)
+            if (suffixLL.peek() == null) {
+                break;
+            }
+            // 4. Convert results into String format
+            String firstPart = this.llToString(clone);
+            String secondPart = this.llToString(suffixLL);
+            System.out.println("first and second: " + firstPart + " " + secondPart);
+            // 5. Check result eligibility for both parts -> add to 'suggestions' if yes
+            if (this.containsWord(firstPart) && this.containsWord(secondPart)) {
+                finalSuggestions.add(firstPart);
+                finalSuggestions.add(secondPart);
+            }
+
+            // Advance bigIt() (if able to - not executed at final spot)
+            bigIt.next();
+
+        }
+
+        // 3. Return 'suggestions'
+        return this.hashSetToString(finalSuggestions);
+    }
+
+
+
+
+     /** Main method for debugging */
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.tryTranspose("cattle"));
+        System.out.println(first.trySplit("a"));
 
     }
 }
