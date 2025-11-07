@@ -161,7 +161,7 @@ public class WordValidation implements SpellingOperations {
         String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
-        // 2. Perform deletion procedure on each word
+        // 2. Perform insertion procedure on each word
         // 2.0. Setup word as a LinkedList
         LinkedList<String> wordLL = this.stringToLinkedList(word);
         // 2.1. Generate insertion at each spot
@@ -221,8 +221,7 @@ public class WordValidation implements SpellingOperations {
     }
 
     /**
-     * Generate legal (within dictionary) words by substituting one letter of the
-     * word
+     * Generate legal (within dictionary) words by substituting one letter of the word
      * 
      * @param word
      * @return all legal words as a String
@@ -233,7 +232,7 @@ public class WordValidation implements SpellingOperations {
         String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
-        // 2. Perform deletion procedure on each word
+        // 2. Perform substitution procedure on each word
         // 2.0. Setup word as a LinkedList
         LinkedList<String> wordLL = this.stringToLinkedList(word);
         // 2.1. Generate insertion at each spot
@@ -274,9 +273,61 @@ public class WordValidation implements SpellingOperations {
         return this.hashSetToString(finalSuggestions);
     }
 
+    /**
+     * Generate legal (within dictionary) words by swapping adjacent characters
+     * 
+     * @param word
+     * @return all legal words as a String
+     */
+    public String tryTranspose(String word) {
+        word.toLowerCase();
+        // 1. Have a suggestions hashSet
+        HashSet<String> finalSuggestions = new HashSet<String>();
+        // 2. Perform transposition procedure on each word
+        // 2.0. Setup word as a LinkedList
+        LinkedList<String> wordLL = this.stringToLinkedList(word);
+        // 2.1. Generate insertion at each spot
+
+        // LETS GET DOWN TO BUSINESS
+        // 1. Traverse the word to find a spot
+        ListIterator<String> bigIt = wordLL.listIterator();
+        while (bigIt.hasNext()) {
+            // 1. Make word clone to operate on
+            LinkedList<String> clone = this.stringToLinkedList(word);
+            // 2. Find insertion spot (whichever letter the bigIt is at)
+            ListIterator<String> swapIt = clone.listIterator();
+            while (swapIt.nextIndex() != bigIt.nextIndex()) {
+                swapIt.next();
+            }
+            // 3. Swap adjacent letters
+            String stored = swapIt.next(); // get the letter for replacement
+            swapIt.remove(); // remove the letter to be repositioned
+
+            if (swapIt.hasNext()) {
+                swapIt.next(); // get position for stored word (after the swapIt element)
+            } else {
+                break; // trying to swap final letter with end (nothingness)
+            }
+            swapIt.add(stored);
+            // 4. Convert result into String format
+            String res = this.llToString(clone);
+            // 5. Check result eligibility -> add to 'suggestions' if yes
+            if (this.containsWord(res) && (!res.equals(word))) {
+                finalSuggestions.add(res);
+            }
+
+            // Advance bigIt() (if able to - not executed at final spot)
+            bigIt.next();
+
+        }
+
+        // 3. Return 'suggestions'
+        return this.hashSetToString(finalSuggestions);
+    }
+
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.trySubstitute("cat "));
+        System.out.println(first.tryTranspose("cattle"));
 
     }
 }

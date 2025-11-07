@@ -23,7 +23,7 @@ PART 5 pts: Implements nearMisses method as specified, composed of:
 
       YES 1 pt: Suggests correct substitutions
 
-      NO 1 pt: Suggests correct transpositions
+      YES 1 pt: Suggests correct transpositions
 
       NO 1 pt: Suggests correct split words
 

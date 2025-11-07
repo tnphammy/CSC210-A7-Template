@@ -22,6 +22,10 @@ public class Main {
         System.out.println(first.trySubstitute("cattle")); // Output: "battle castle tattle rattle wattle"
         System.out.println(first.trySubstitute("cat ")); // Output: catt cats cato
     
+        // Test: Transposition
+        System.out.println("----------------------TRANSPOSITION TESTS----------------------");
+        System.out.println(first.tryTranspose("cat")); // Output: "act"
+        
     }
 }
 
