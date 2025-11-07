@@ -1,5 +1,3 @@
-// package a5; // what is this package
-
 import java.util.ArrayList;
 
 /**

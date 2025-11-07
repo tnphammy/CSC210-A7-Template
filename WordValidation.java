@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.io.*;
 import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class WordValidation implements SpellingOperations {
     public HashSet<String> validWords = null;
@@ -42,6 +44,31 @@ public class WordValidation implements SpellingOperations {
     }
 
     /**
+     * Convert a Linked List of String elements to a String
+     * @param ll the LinkedList
+     * @return the String representation of ll
+     */
+    public String llToString(LinkedList<String> ll) {
+        String res = "";
+        ListIterator<String> it = ll.listIterator();
+        while (it.hasNext()) {
+            String curr = it.next();
+            res += curr;
+        }
+        return res;
+    }
+
+    public LinkedList<String> stringToLinkedList(String str) {
+        LinkedList<String> res = new LinkedList<String>();
+        for (int i = 0; i < str.length(); i++) {
+            char character = str.charAt(i);
+            String letter = String.valueOf(character);
+            res.add(letter);
+        }
+        return res;
+    }
+
+    /**
      * Checks for words that are one edit away from the queried word
      * @param query the word to check
      * @return a list of all valid words that are one edit away from the quer
@@ -50,8 +77,52 @@ public class WordValidation implements SpellingOperations {
         return new ArrayList<String>();
     }
 
+    /**
+     * Generate legal (within dictionary) words by deleting one letter of the word
+     * @param word
+     * @return all legal words as a String
+     */
+    public String tryDelete(String word) {
+        // 1. Have a suggestions String
+        String suggestions = "";
+        // should have a suggestions hashSet
+        HashSet<String> finalSuggestions = new HashSet<String>();
+        // 2. Perform deletion procedure on each word
+        // 2.0. Setup word as a LinkedList
+        LinkedList<String> wordLL = this.stringToLinkedList(word);
+        // 2.1. Generate deletion of each letter
+
+        // LETS GET DOWN TO BUSINESS
+        // 1. Traverse the word to delete each letter
+        ListIterator<String> bigIt = wordLL.listIterator();
+        while (bigIt.hasNext()) {
+            // 1. Make word clone to operate on
+            LinkedList<String> clone = this.stringToLinkedList(word);
+            // 2. Find deletion spot (whichever letter the bigIt is at)
+            ListIterator<String> deleteIt = clone.listIterator();
+            while(deleteIt.nextIndex() != bigIt.nextIndex()) {
+                deleteIt.next();
+            }
+            // 3. Delete at spot, on clone => LinkedList result
+            deleteIt.next();
+            deleteIt.remove();
+            // 4. Convert result into String format
+            String res = this.llToString(clone);
+            // 5. Check result eligibility -> add to 'suggestions' if yes
+            if (this.containsWord(res)) {
+                finalSuggestions.add(res);
+            }
+            // Advance bigIt()
+            bigIt.next();
+        }
+
+        // 3. Return 'suggestions'
+        return finalSuggestions.toString();
+    }
+
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.containsWord("Abellll"));
+        System.out.println(first.tryDelete("catttle"));
+
     }
 }
