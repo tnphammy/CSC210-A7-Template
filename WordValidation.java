@@ -104,7 +104,26 @@ public class WordValidation implements SpellingOperations {
      * @return a list of all valid words that are one edit away from the quer
      */
     public ArrayList<String> nearMisses(String query) {
-        return new ArrayList<String>();
+        // Edge cases:
+        if (query == null) {
+            return null;
+        }
+        query.toLowerCase(); // ignore capitalization
+        HashSet<String> suggestedSet = new HashSet<String>();
+
+        // Call each modification method
+        // 1. Deletion
+        suggestedSet.addAll(this.tryDelete(query));
+        // 2. Insertion
+        suggestedSet.addAll(this.tryInsert(query));
+        // 3. Substitution
+        suggestedSet.addAll(this.trySubstitute(query));
+        // 4. Transposition
+        suggestedSet.addAll(this.tryTranspose(query));
+        // 5. Split
+        suggestedSet.addAll(this.trySplit(query));
+
+        return new ArrayList<String>(suggestedSet);
     }
 
     /**
@@ -113,8 +132,7 @@ public class WordValidation implements SpellingOperations {
      * @param word the queried word
      * @return all legal words as a String
      */
-    public String tryDelete(String word) {
-        word.toLowerCase();
+    public HashSet<String> tryDelete(String word) {
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
         // 2. Perform deletion procedure on each word
@@ -147,7 +165,7 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return this.hashSetToString(finalSuggestions);
+        return finalSuggestions;
     }
 
     /**
@@ -156,8 +174,7 @@ public class WordValidation implements SpellingOperations {
      * @param word the queried word
      * @return all legal words as a String
      */
-    public String tryInsert(String word) {
-        word.toLowerCase();
+    public HashSet<String> tryInsert(String word) {
         // 0. Have the alphabet
         String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         // 1. Have a suggestions hashSet
@@ -218,7 +235,7 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return this.hashSetToString(finalSuggestions);
+        return finalSuggestions;
     }
 
     /**
@@ -227,8 +244,7 @@ public class WordValidation implements SpellingOperations {
      * @param word the queried word
      * @return all legal words as a String
      */
-    public String trySubstitute(String word) {
-        word.toLowerCase();
+    public HashSet<String> trySubstitute(String word) {
         // 0. Have the alphabet
         String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         // 1. Have a suggestions hashSet
@@ -271,7 +287,7 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return this.hashSetToString(finalSuggestions);
+        return finalSuggestions;
     }
 
     /**
@@ -280,8 +296,7 @@ public class WordValidation implements SpellingOperations {
      * @param word the queried word
      * @return all legal words as a String
      */
-    public String tryTranspose(String word) {
-        word.toLowerCase();
+    public HashSet<String> tryTranspose(String word) {
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
         // 2. Perform transposition procedure on each word
@@ -323,7 +338,7 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return this.hashSetToString(finalSuggestions);
+        return finalSuggestions;
     }
 
     /**
@@ -332,8 +347,7 @@ public class WordValidation implements SpellingOperations {
      * @param word the queried word
      * @return all legal word pairs as a String
      */
-    public String trySplit(String word) {
-        word.toLowerCase();
+    public HashSet<String> trySplit(String word) {
         // 1. Have a suggestions hashSet
         HashSet<String> finalSuggestions = new HashSet<String>();
         // 2. Perform transposition procedure on each word
@@ -373,7 +387,6 @@ public class WordValidation implements SpellingOperations {
             // 4. Convert results into String format
             String firstPart = this.llToString(clone);
             String secondPart = this.llToString(suffixLL);
-            System.out.println("first and second: " + firstPart + " " + secondPart);
             // 5. Check result eligibility for both parts -> add to 'suggestions' if yes
             if (this.containsWord(firstPart) && this.containsWord(secondPart)) {
                 finalSuggestions.add(firstPart);
@@ -386,7 +399,7 @@ public class WordValidation implements SpellingOperations {
         }
 
         // 3. Return 'suggestions'
-        return this.hashSetToString(finalSuggestions);
+        return finalSuggestions;
     }
 
 
@@ -395,7 +408,7 @@ public class WordValidation implements SpellingOperations {
      /** Main method for debugging */
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.trySplit("a"));
+        System.out.println(first.nearMisses(""));
 
     }
 }

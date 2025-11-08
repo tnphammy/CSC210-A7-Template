@@ -33,6 +33,11 @@ public class Main {
         System.out.println(first.tryTranspose("cattell")); // Output: "catt ell cat tell"
         System.out.println(first.tryTranspose("")); // Output: ""
         
+        // Test: nearMisses (complete)
+        System.out.println(first.nearMisses("cest")); 
+        // Output above: [rest, chest, pest, cost, test, celt, cent, vest, lest, best, nest, jest, fest, cast, zest, yest, west, cyst, crest]
+        System.out.println(first.nearMisses("")); // Output: [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z]
+        System.out.println(first.nearMisses(null)); // Output: null
     }
 }
 
