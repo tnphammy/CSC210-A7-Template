@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.ListIterator;
+
 /** Class containing word checker - no user interaction */
 public class WordValidation implements SpellingOperations {
     /** HashSet representation of 'dictionary' elements */
@@ -43,7 +44,7 @@ public class WordValidation implements SpellingOperations {
      * @return true if the query word is in the dictionary.
      */
     public boolean containsWord(String query) {
-        return this.validWords.contains(query);
+        return this.validWords.contains(query.toLowerCase());
     }
 
     /**
@@ -239,7 +240,8 @@ public class WordValidation implements SpellingOperations {
     }
 
     /**
-     * Generate legal (within dictionary) words by substituting one letter of the word
+     * Generate legal (within dictionary) words by substituting one letter of the
+     * word
      * 
      * @param word the queried word
      * @return all legal words as a String
@@ -362,7 +364,7 @@ public class WordValidation implements SpellingOperations {
             // 1. Make word clone to operate on
             LinkedList<String> clone = this.stringToLinkedList(word);
             // 2. Find space spot (whichever letter the bigIt is at)
-            // 2.0. Prohibit putting a space at the front 
+            // 2.0. Prohibit putting a space at the front
             if (!bigIt.hasPrevious()) {
                 bigIt.next(); // go to the next available spot
                 continue;
@@ -375,7 +377,7 @@ public class WordValidation implements SpellingOperations {
             // Make a suffix LL (the prefix = 'clone' modified)
             LinkedList<String> suffixLL = new LinkedList<>();
             // Remove all elements after Iterator from 'clone' -> put into 'suffix'
-            while(spaceIt.hasNext()) {
+            while (spaceIt.hasNext()) {
                 String stored = spaceIt.next();
                 spaceIt.remove();
                 suffixLL.addLast(stored);
@@ -402,13 +404,10 @@ public class WordValidation implements SpellingOperations {
         return finalSuggestions;
     }
 
-
-
-
-     /** Main method for debugging */
+    /** Main method for debugging */
     public static void main(String[] args) {
         WordValidation first = new WordValidation("words.txt");
-        System.out.println(first.nearMisses(""));
+        System.out.println(first.containsWord("Summers"));
 
     }
 }

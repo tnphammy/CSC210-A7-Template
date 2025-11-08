@@ -29,9 +29,9 @@ PART 5 pts: Implements nearMisses method as specified, composed of:
 
 YES 1 pt: Main includes multiple tests for each point listed above
 
-NO 1 pt: SpellChecker runs in command line mode as described
+YES 1 pt: SpellChecker runs in command line mode as described
 
-NO 1 pt: SpellChecker runs in file checking mode as described
+YES 1 pt: SpellChecker runs in file checking mode as described
 
 (Note that in addition to the tests that you write, we will perform automated testing of our own on your submitted code.)
 
